@@ -42,15 +42,24 @@ public class NetworkManager : MonoBehaviour {
 		netOn = true;
 	}
 
-	
+	void StopClient() {
+		this.netOn = false;
+		Network.Disconnect ();
+		Debug.Log ("Client Stopped");
+	}
+		
 	// Update is called once per frame
 	void Update () {
 
-		bool createServ = Input.GetKeyUp ("p");
-		bool joinServ = Input.GetKeyUp ("o");
+		bool createServ = Input.GetKeyUp (KeyCode.P);
+		bool joinServ = Input.GetKeyUp (KeyCode.O);
+
+		if (Input.GetKeyUp (KeyCode.Escape)) {
+			this.StopClient();
+		}
 
 		if (createServ && !netOn) {
-				this.StartServer();
+			this.StartServer();
 		}
 
 		if (joinServ && !netOn) {
