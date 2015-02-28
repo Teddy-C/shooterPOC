@@ -54,13 +54,24 @@ public class NetworkManager : MonoBehaviour {
 		Network.DestroyPlayerObjects (player);
 	}
 
+	void StopClient() {
+		this.netOn = false;
+		Network.Disconnect ();
+		Debug.Log ("Client Stopped");
+	}
+		
 	void Update () {
 
 		bool createServ = Input.GetKeyUp (KeyCode.P);
 		bool joinServ = Input.GetKeyUp (KeyCode.O);
 
+
+		if (Input.GetKeyUp (KeyCode.Escape)) {
+			this.StopClient();
+		}
+
 		if (createServ && !netOn) {
-				this.StartServer();
+			this.StartServer();
 		}
 
 		if (joinServ && !netOn) {
