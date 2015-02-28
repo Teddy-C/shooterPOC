@@ -3,18 +3,31 @@ using System.Collections;
 
 public class NetworkManager : MonoBehaviour {
 
-	private const string srvType = "TESTGAMEHOST";
-	private const string srvName = "Jean Luc Delarue";
-	private int maxConn = 5;
-	private int listenPort = 26777;
-	private string localIp = "192.168.0.17";
-	private HostData srvHost;
-	private bool netOn = false;
+//	private const string srvType = "TESTGAMEHOST";
+//	private const string srvName = "Jean Luc Delarue";
+	private int maxConn;
+	private int listenPort;
+//	private string localIp;
+	private string remoteIp;
+	private bool netOn;
+	
+	// Use this for initialization
+	void Start () {
+		maxConn = 5;
+		listenPort = 26777;
+//		localIp = "192.168.0.18";
+		remoteIp = "192.168.0.18";
+		netOn = false;
+	}
 
 	void StartServer()
 	{
 		Network.InitializeServer (maxConn, listenPort, false);
-		//MasterServer.RegisterHost (srvType, srvName);
+	}
+
+	void JoinServer()
+	{
+		Network.Connect (remoteIp, listenPort);
 	}
 
 	void OnServerInitialized()
@@ -23,11 +36,12 @@ public class NetworkManager : MonoBehaviour {
 		netOn = true;
 	}
 
-	// Use this for initialization
-	void Start () {
-		srvHost.port=listenPort;
-		srvHost.ip = localIp;
+	void OnConnectedToServer()
+	{
+		Debug.Log ("Server Joined");
+		netOn = true;
 	}
+
 	
 	// Update is called once per frame
 	void Update () {
@@ -40,7 +54,7 @@ public class NetworkManager : MonoBehaviour {
 		}
 
 		if (joinServ && !netOn) {
-			
+			this.JoinServer();
 		}
 	
 	}
