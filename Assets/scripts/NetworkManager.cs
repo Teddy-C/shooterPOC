@@ -42,12 +42,22 @@ public class NetworkManager : MonoBehaviour {
 		netOn = true;
 	}
 
-	
-	// Update is called once per frame
+	void OnPlayerConnected(NetworkPlayer player)
+	{
+		Debug.Log ("Player connected from " + player.ipAddress + ":" + player.port);
+	}
+
+	void OnPlayerDisconnected(NetworkPlayer player)
+	{
+		Debug.Log ("Player disconnected from " + player.ipAddress + ":" + player.port);
+		Network.RemoveRPCs (player);
+		Network.DestroyPlayerObjects (player);
+	}
+
 	void Update () {
 
-		bool createServ = Input.GetKeyUp ("p");
-		bool joinServ = Input.GetKeyUp ("o");
+		bool createServ = Input.GetKeyUp (KeyCode.P);
+		bool joinServ = Input.GetKeyUp (KeyCode.O);
 
 		if (createServ && !netOn) {
 				this.StartServer();
