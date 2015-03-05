@@ -10,13 +10,14 @@ public class NetworkManager : MonoBehaviour {
 //	private string localIp;
 	private string remoteIp;
 	private bool netOn;
+	public GameObject playerPrefab;
 	
 	// Use this for initialization
 	void Start () {
 		maxConn = 5;
 		listenPort = 26777;
 //		localIp = "192.168.0.18";
-		remoteIp = "192.168.0.18";
+		remoteIp = "127.0.0.1";
 		netOn = false;
 	}
 
@@ -27,18 +28,22 @@ public class NetworkManager : MonoBehaviour {
 
 	void JoinServer()
 	{
+		//super long... si ce n'est impossible
 		Network.Connect (remoteIp, listenPort);
+		Debug.Log ("I am connecting");
 	}
 
 	void OnServerInitialized()
 	{
 		Debug.Log ("Server Initialized");
+		SpawnPlayer ();
 		netOn = true;
 	}
 
 	void OnConnectedToServer()
 	{
 		Debug.Log ("Server Joined");
+		SpawnPlayer ();
 		netOn = true;
 	}
 
@@ -59,7 +64,12 @@ public class NetworkManager : MonoBehaviour {
 		Network.Disconnect ();
 		Debug.Log ("Client Stopped");
 	}
-		
+
+	private void SpawnPlayer()
+	{
+		Network.Instantiate (playerPrefab, new Vector3 (0f, 1f, 0f), Quaternion.identity, 0);
+	}
+	
 	void Update () {
 
 		bool createServ = Input.GetKeyUp (KeyCode.P);
